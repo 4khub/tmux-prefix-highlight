@@ -78,9 +78,12 @@ highlight() {
     fi
 
     local -r extended_highlights="${copy_mode}${sync_panes}"
-    local -r client_prefix="#{?client_prefix,$prefix_with_optional_affixes,$empty_with_optional_affixes}"
-
-    local -r highlight_on_prefix="${prefix_highlight}${client_prefix}${extended_highlights}#[default]"
+    local -r empty_prefix="${empty_with_optional_affixes}"
+    local -r copy_prefix="#{?pane_in_mode,$copy_with_optional_affixes,$empty_prefix}"
+    local -r sync_prefix="#{?synchronize-panes,$sync_with_optional_affixes,$copy_prefix}"
+    local -r client_prefix="#{?client_prefix,$prefix_with_optional_affixes,$sync_prefix}"
+   
+    local -r highlight_on_prefix="${prefix_highlight}${client_prefix}#[default]"
     tmux set-option -gq "$status" "${status_value/$place_holder/$highlight_on_prefix}"
 }
 
